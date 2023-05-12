@@ -115,4 +115,6 @@ gb = GradientBoostingClassifier()
 best_model = gb
 best_model.fit(x_train, y_train)
 y_pred = best_model.predict(x_test)
-print("Best model accuracy on test set:", accuracy_score(y_test, y_pred))
+model_accuracy = accuracy_score(y_test, y_pred)
+print("Best model accuracy on test set:", model_accuracy)
+

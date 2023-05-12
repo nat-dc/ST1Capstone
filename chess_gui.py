@@ -88,37 +88,34 @@ class chess_GUI:
         result_string = ""
         self.resultpredict_text.delete(0.0, tk.END)
 
-        #collecting all the data from user entry points
-        rated = self.rated_entry.get()
-        time_increment = self.increment_entry.get()
-        white_rating = self.whiterating_entry.get()
-        black_rating = self.blackrating_entry.get()
-        opening_moves = self.openingmoves_entry.get()
-        opening_shortname = self.openingshortname_entry.get()
-        opening_response = self.openingresponse_entry.get()
-        opening_variation = self.openingvariation_entry.get()
+        if self.rated_entry.get() == 'True':
+            rated = 1
+        else:
+            rated = 0
+
+        time_increment = int(self.increment_entry.get())
+        white_rating = int(self.whiterating_entry.get())
+        black_rating = int(self.blackrating_entry.get())
+        opening_moves = int(self.openingmoves_entry.get())
+        opening_shortname = int(self.openingshortname_entry.get())
+        opening_response = int(self.openingresponse_entry.get())
+        opening_variation = int(self.openingvariation_entry.get())
 
         #opening shortname, response and variation are strings and rated is a bool so i tried to convert them to integers with the ordinal encoder
         chess_info = [rated, time_increment, white_rating, black_rating, opening_moves, opening_shortname,
                       opening_response, opening_variation]
-        for i in [chess_info]:
-            if chess_info[i].dtype=='object' or chess_info[i].dtype=='bool':
-                chess_info[i] = OrdinalEncoder().fit_transform(chess_info[i].values.reshape(-1, 1))
-                #this whole ordinal encoder line doesnt work since it seems like OE is only really for data frames, not a single set of data
-                #i'm not sure how else to convert the strings to relevant integers for use in the model
-                #i can't manually convert with if statements as theres over 1400 possibilities
-
 
         chess_prediction = best_model.predict([chess_info])
+        disp_string = ("This prediction has an accuracy of:", str(model_accuracy))
 
         result = chess_prediction
 
         if (chess_prediction == [0]):
-            result_string = ('black wins')
+            result_string = (disp_string , '\n' , "Black Wins")
         elif (chess_prediction == [1]):
-            result_string = ('draw')
+            result_string = (disp_string , '\n' , "Draw")
         else:
-            result_string = ('white wins')
+            result_string = (disp_string , '\n' , "White Wins")
 
         self.resultpredict_text.insert(1.0,result_string)
 
